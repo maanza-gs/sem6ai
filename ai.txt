@@ -1,0 +1,540 @@
+//BFS
+
+
+import networkx as nx
+
+def BFS(graph, index, target):
+    queue = []
+    queue.append(index)
+    visited[index] = True
+    
+    while queue:
+        index = queue.pop(0)
+        
+        print(index)
+        route.append(index)
+        
+        if index == target:
+            return
+        
+        for x in graph[index]:
+            if(visited[x] == False):
+                queue.append(x)
+                visited[x] = True
+
+
+def findPaths(route):
+    paths = []
+    for i in range(1, len(route)):
+        path = [route[i-1], route[i]]
+        paths.append(path)
+    return paths
+
+graph = {
+    
+    0: [1, 2],
+    1: [2],
+    2: [0, 3],
+    3: [3]
+    
+    }
+
+print("Graph: ", graph)
+
+visited = [False for _ in range(len(graph))]
+
+start = 0
+target = 3
+
+route = []
+
+BFS(graph, start, target)
+
+paths = findPaths(route)
+
+G = nx.Graph()
+
+for x in graph:
+    G.add_node(x)
+    
+for x in graph:
+    for y in graph[x]:
+        G.add_edge(x, y)
+
+pos = nx.spring_layout(G)
+
+nx.draw(G, pos)
+
+nx.draw_networkx_edges(G, pos, edgelist = paths, width = 3, edge_color='r')
+
+
+
+
+//DFS
+
+
+import networkx as nx
+
+def DFS(graph, index, target):
+    if(visited[index] == False):
+        visited[index] = True
+    
+    print(index)
+    route.append(index)
+    if(target == index):
+        return True
+    
+    for i in graph[index]:
+        if(visited[i] == False):
+            if DFS(graph, i, target):
+                return True
+    return False
+
+def findPaths(route):
+    paths = []
+    for i in range(1, len(route)):
+        path = [route[i-1], route[i]]
+        paths.append(path)
+    return paths
+
+graph = {
+    
+    0: [1, 2],
+    1: [2],
+    2: [0, 3],
+    3: [3]
+    
+    }
+
+print("Graph: ", graph)
+
+visited = [False for _ in range(len(graph))]
+
+start = 2
+target = 3
+
+route = []
+
+DFS(graph, start, target)
+
+paths = findPaths(route)
+
+G = nx.Graph()
+
+for x in graph:
+    G.add_node(x)
+    
+for x in graph:
+    for y in graph[x]:
+        G.add_edge(x, y)
+
+pos = nx.spring_layout(G)
+
+nx.draw_networkx(G, pos)
+
+nx.draw_networkx_edges(G, pos, edgelist = paths, width = 3, edge_color='r')
+
+
+
+
+//DLS
+
+
+import networkx as nx
+
+def DLS(graph, index, target, depth):
+    if visited[index] == False:
+        visited[index] = True
+    
+    route.append(index)
+    
+    if depth > limit:
+        return False
+    
+    if(target == index):
+        return True
+    
+    for i in graph[index]:
+        if(visited[i] == False):
+            if DLS(graph, i, target, depth+1):
+                return True
+            else:
+                visited[i] = False
+                route.pop()
+                
+    return False
+
+def findPaths(route):
+    paths = []
+    for i in range(1, len(route)):
+        path = [route[i-1], route[i]]
+        paths.append(path)
+    return paths
+
+graph = {
+    
+    0: [1, 2, 3],
+    1: [0, 4],
+    2: [0, 5],
+    3: [0, 6],
+    4: [2, 7],
+    5: [3, 7],
+    6: [4, 7],
+    7: [4, 5, 6]
+    
+    }
+
+print("Graph: ", graph)
+
+visited = [False for _ in range(len(graph))]
+
+start = 6
+target = 7
+
+route = []
+
+limit = 2
+
+DLS(graph, start, target, 0)
+
+if visited[target] == False:
+    print("Path doesn't exist within given limit")
+else:
+    print(route)
+    
+
+paths = findPaths(route)
+
+G = nx.Graph()
+
+for x in graph:
+    G.add_node(x)
+    
+for x in graph:
+    for y in graph[x]:
+        G.add_edge(x, y)
+
+pos = nx.spring_layout(G)
+
+nx.draw_networkx(G, pos)
+
+nx.draw_networkx_edges(G, pos, edgelist = paths, width = 3, edge_color='r')
+
+
+
+
+//IDS
+
+
+import networkx as nx
+
+def DLS(graph, index, target, depth):
+    if visited[index] == False:
+        visited[index] = True
+    
+    route.append(index)
+    
+    if depth > limit:
+        return False
+    
+    if(target == index):
+        return True
+    
+    for i in graph[index]:
+        if(visited[i] == False):
+            if DLS(graph, i, target, depth+1):
+                return True
+            else:
+                visited[i] = False
+                route.pop()
+                 
+    return False
+
+def findPaths(route):
+    paths = []
+    for i in range(1, len(route)):
+        path = [route[i-1], route[i]]
+        paths.append(path)
+    return paths
+
+graph = {
+    
+    0: [1, 2, 3],
+    1: [0, 4],
+    2: [0, 5],
+    3: [0, 6],
+    4: [2, 7],
+    5: [3, 7],
+    6: [4, 7],
+    7: [4, 5, 6]
+    
+    }
+
+print("Graph: ", graph)
+
+visited = [False for _ in range(len(graph))]
+
+start = 0
+target = 7
+
+route = []
+
+limit = 0
+
+flag = False
+
+for i in range(1, len(graph)+1):
+    visited = [False for _ in range(len(graph))]
+    limit += 1
+    flag = DLS(graph, start, target, 0)
+    if flag:
+        break
+
+if visited[target] == False:
+    print("Path doesn't exist within given limit")
+else:
+    print("Path found")
+    print(route)
+    
+
+paths = findPaths(route)
+
+G = nx.Graph()
+
+for x in graph:
+    G.add_node(x)
+    
+for x in graph:
+    for y in graph[x]:
+        G.add_edge(x, y)
+
+pos = nx.spring_layout(G)
+
+nx.draw_networkx(G, pos)
+
+nx.draw_networkx_edges(G, pos, edgelist = paths, width = 3, edge_color='r')
+
+
+
+
+//A*
+
+
+h = {
+     0: 9,
+     1: 7,
+     2: 5,
+     3: 1,
+     4: 7,
+     5: 0
+    }
+
+G = {
+     0: {1:2, 4:2 },
+     1: {0:2 , 2:2 , 4:2 },
+     2: {1:2 , 3:4 },
+     3: {2:4 , 4:6 , 5:1 },
+     4: {0:2, 1:2, 3:6 },
+     5: {3:1 }
+    }
+
+def a_star(G, h, start, goal):
+    q = []
+    q.append((h[0], [start], 0))
+    visited = set()
+    
+    while q:
+        q.sort()
+        
+        f = q[0][0]
+        i = 0
+        while i<len(q) and q[i][0]==f:
+            visited.add(q[i][1][-1])
+            i+=1
+            
+        j=0
+        while q and q[j][0]==f:
+            f, path, g = q.pop(0)
+            node = path[len(path)-1]
+            
+            if node==goal:
+                return [path, g]
+            
+            for i in G[node].keys():
+                if i not in visited:
+                    new_path= list(path)
+                    new_path.append(i)
+                    q.append((h[i]+g+G[node][i], new_path, g+G[node][i]))
+            j+=1
+            
+print(a_star(G, h, 0, 5))
+
+
+
+//UCS 
+
+
+import networkx as nx
+import matplotlib.pyplot as plt
+
+g = {
+    5: {3: 1, 8 :6},
+    3: {2: 3, 4: 1},
+    2: {},
+    4: {8: 1},
+    8: {9: 4}
+}
+
+for k, d in g.items():
+    for ik in d:
+        d[ik] = {'weight': d[ik]}
+        
+print(g)        
+
+def UCS(g, initial, goal):
+    visited=set()
+    q=list()
+    path = [initial]
+    q.append([0, path])
+    
+    while q:
+        q.sort()
+        dis,path = q.pop(0)        
+        s =path[len(path)-1]
+        if s==goal:
+            return [path, dis]
+        visited.add(s)
+        
+        for n in g[s].keys():
+            if n not in visited:
+                newpath=list(path)
+                newpath.append(n)
+                q.append([dis + g[s][n]['weight'] , newpath])
+
+G = nx.DiGraph(g)
+pos = nx.spring_layout(G,k=.8)
+nx.draw_networkx(G, pos)
+
+labels = nx.get_edge_attributes(G,'weight')
+nx.draw_networkx_edge_labels(G,pos,edge_labels=labels)
+plt.show()
+
+initial=5
+goal=9
+
+print(UCS(g,initial,goal))
+
+
+
+// M&C
+
+
+# [missionary_left, cannibal_left, boat, missionary_right, cannibal_right]
+
+s = [3, 3, 'L', 0, 0]
+g = [0, 0, 'R', 3, 3]
+
+def h(state):
+    # (missionary_left + cannibal-left)/2
+    return (state[0]+state[1])/2
+
+def isSafe(state):
+    return (state[0]==0 or state[0]>=state[1]) and (state[3]==0 or state[3]>=state[4])    
+
+def generate(state):
+    states= []
+    ml, cl, boat, mr, cr = state
+    if boat=='L':
+        for i in range(1, min(2, ml)+1):
+            if isSafe([ml-i, cl, 'R', mr+i, cr]):
+                states.append([ml-i, cl, 'R', mr+i, cr])
+        for i in range(1, min(2, cl)+1):
+            if isSafe([ml, cl-i, 'R', mr, cr+i]):
+                states.append([ml, cl-i, 'R', mr, cr+i])
+        if ml>0 and cl>0:
+            if isSafe([ml-1, cl-1, 'R', mr+1, cr+1]):
+                states.append([ml-1, cl-1, 'R', mr+1, cr+1])
+    else:
+        for i in range(1, min(2, mr)+1):
+            if isSafe([ml+i, cl, 'L', mr-i, cr]):
+                states.append([ml+i, cl, 'L', mr-i, cr])
+        for i in range(1, min(2, cr)+1):
+            if isSafe([ml, cl+i, 'L', mr, cr-i]):
+                states.append([ml, cl+i, 'L', mr, cr-i])
+        if mr>0 and cr>0:
+            if isSafe([ml+1, cl+1, 'L', mr-1, cr-1]):
+                states.append([ml+1, cl+1, 'L', mr-1, cr-1])               
+    return states
+
+
+def a_star(start, goal):
+    q = []
+    q.append((h(start), [start], 0))
+    visited = list()
+    
+    while q:
+        q.sort()
+        f = q[0][0]
+        i = 0
+        while i<len(q) and q[i][0]==f:
+            visited.append(q[i][1][-1])
+            i+=1
+            
+        while q and q[0][0]==f:
+            f, path, g = q.pop(0)
+            node = path[len(path)-1]
+            
+            if node==goal:
+                return [path, g]
+            
+            for i in generate(node):
+                if i not in visited:
+                    new_path= list(path)
+                    new_path.append(i)
+                    q.append((h(i)+g+1, new_path, g+1))
+
+def printSteps(steps):
+    for step in steps:
+        print(step[0], "M ", step[1], "C ", end="")
+        if step[2]=='L':
+            print('\____/              ', end="")
+        else:
+            print('             \____/ ', end="")
+        print(step[3], "M ", step[4], "C")
+        print("         ~~~~~~~~~~~~~~~~~~~")
+        print()
+        
+        
+steps, no_of_trips = a_star(s, g)
+printSteps(steps)
+print("No of trips : ", no_of_trips)
+
+//JUG
+import heapq
+
+def h(state):
+    return abs(2 - state[0]) + abs(2 - state[1])
+
+def possible_actions(state):
+    x, y = state
+    actions = [(x, 0), (0, y), (4, y), (x, 3), (min(x + y, 4), max(0, x + y - 4)), (max(0, y + x - 3), min(3, x + y))]
+    return actions
+
+def astar(start, goal):
+    heap = [(h(start), 0, start, [])]
+    visited = set()
+    while heap:
+        (f, g, state, path) = heapq.heappop(heap)
+        if state == goal:
+            return (g, path + [state])
+        if state in visited:
+            continue
+        visited.add(state)
+        for action in possible_actions(state):
+            heapq.heappush(heap, (g + h(action) + 1, g + 1, action, path + [state]))
+
+start = (0, 0)
+goal = (0, 2)
+(cost, path) = astar(start, goal)
+print("Cost:", cost)
+print("Path:", path)
